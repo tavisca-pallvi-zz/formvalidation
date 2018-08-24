@@ -8,25 +8,25 @@
 <body>
     <fieldset>
         <legend>User Registration Form</legend>
-    <form action="Welcome.html" method="post" onsubmit="return validate(this)">
+    <form action="Welcome.html" method="get" onsubmit="return validate()">
        
             <p>Please fill in this form to create an account.</p>
             <hr>
 
             <label for="FirstName"><b>FirstName</b></label>
-            <input type="text" placeholder="FirstName" name="FirstName"  id="first" onblur="return validatealpha(event,this)" required>
+            <input type="text" placeholder="FirstName" name="FirstName"  id="first" onblur="return validatealpha(event)">
             <label class="errorMsg" id="errorMsgname"></label>
 
             <label for="LastName"><b>LastName</b></label>
-            <input type="text" placeholder="LastName" name="LastName" id="last" onblur="return validatealphaname(event,this)"  required>
+            <input type="text" placeholder="LastName" name="LastName" id="last" onblur="return validatealphaname(event,this)" >
             <label class="errorMsg" id="errorMsglastname"></label>
 
             <label for="Phone"><b>Phone Number</b></label>
-            <input type="text" placeholder="Phone Number" id="phone" name="Phone" onblur="validatephoneno(event,this)" required>
+            <input type="text" placeholder="Phone Number" id="phone" name="Phone" onblur="return validatephoneno(event,this)" >
             <label class="errorMsg" id="errorMsgPhone"></label>
 
             <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="email"  id="email" name="email"  onblur="return validateemail(event,this)" required>
+            <input type="text" placeholder="email"  id="email" name="email"  onblur="return validateemail(event)" >
 
         <label class="errorMsg" id="errorMsgEmail"></label>
       
@@ -36,7 +36,7 @@
             </textarea>
             <input  class="errorMsg"  value="">
         </label>
-            <select id="check" onblur="checks()">
+            <select id="check" onblur="return checks()">
                 <option value="Select">Select</option>
                 <option value="Mumbai">Mumbai</option>
                 <option value="Pune">Pune</option>
@@ -45,9 +45,9 @@
                 <option value="Delhi">Delhi</option>
             </select>
         <label class="errorMsg" id="errorMsgselect"></label>
-            <label>Male <input type="radio" name="gender" value="male"  onblur="checkgender()"> <br></label>
-            <label>Female<input type="radio" name="gender" value="female"  onblur="checkgender()"></label>
-            <label>Other <input type="radio" name="gender" value="other"  onblur="checkgender()"></label>
+            <label>Male <input type="radio" name="gender" value="male"  onblur="return checkgender()"> <br></label>
+            <label>Female<input type="radio" name="gender" value="female"  onblur="return checkgender()"></label>
+            <label>Other <input type="radio" name="gender" value="other"  onblur="return checkgender()"></label>
         <label class="errorMsg" id="errorMsggender"></label>
     <div>
         <button type="button" class="cancelbtn">Cancel</button>
@@ -59,22 +59,44 @@
         </fieldset>
     <script>
         function validate() {
-
-            var name = document.getElementById('errorMsgname').innerHTML;
-            var last = document.getElementById('errorMsglastname').innerHTML;
-            var phone = document.getElementById('errorMsgPhone').innerHTML;
-            var email = document.getElementById('errorMsgEmail').innerHTML;
-            var gender = document.getElementById('errorMsggender').innerHTML;
-            var city = document.getElementById('errorMsgselect').innerHTML;
-            if (name != " " && last != " " && phone != " " && email != " " && gender != " " && city!=" ") {
-                return false;
+            debugger;
+            var ev = '';
+          //  console.log("em");
+            //var f = 0;
+            if (validateemail(ev)==true) {
+                console.log("em");
+                if (checkgender()) {
+                    console.log("ge");
+                    if (validatealpha(ev)) {
+                        console.log("f");
+                        if (validatealphaname(ev)) {
+                            console.log("l");
+                            if (checks()) {
+                                console.log("g");
+                                if (validatephoneno(ev)) {
+                                    console.log("p");
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+               
             }
-            return true;
+            alert("The form is not fully validated");
+            return false;
+
+            
         }
-        function validateemail(event, temp) {
+        function validateemail(event) {
+           // debugger;
+            document.getElementById('errorMsgEmail').innerHTML = "";
+            var temp = document.getElementById("email");
+
             var emailExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if (emailExp.test(temp.value)) {
 
+                document.getElementById('errorMsgEmail').innerHTML = "";
                 return true;
             }
             else {
@@ -85,43 +107,58 @@
         }
 
         function checkgender() {
-            debugger;
+            //debugger;
             var p = document.getElementsByName("gender");
             for (var i = 0; i < p.length; i++) {
                 if (p[i].checked == true) {
+                    document.getElementById('errorMsggender').innerHTML = "";
                     return true;
                 }
-                else {
+                //else {
 
-                    document.getElementById('errorMsggender').innerHTML = "*Please check something*";
-                    return false;
-                }
+                //   
+                //}
 
 
             }
+            document.getElementById('errorMsggender').innerHTML = "*Please check something*";
+                return false;
             
         }
-        function validatealpha(event, temp) {
+        function validatealpha(event) {
             
             var re_name = /^[A-Za-z]+$/;
+            var temp = document.getElementById("first");
+
+            document.getElementById('errorMsgname').innerHTML = " ";
             if (!re_name.test(temp.value)) {
 
                 document.getElementById('errorMsgname').innerHTML = "*Name should not contain no*";
-
+                return false;
             }
+            return true;
+
         }
 
-        function validatealphaname(event, temp) {
-            
+        function validatealphaname(event) {
+
+            var temp = document.getElementById("last");
+
             var re_name = /^[A-Za-z]+$/;
+            document.getElementById('errorMsglastname').innerHTML = " ";
             if (!re_name.test(temp.value)) {
 
                 document.getElementById('errorMsglastname').innerHTML = "*Name should not contain no*";
+                return false;
+            }
+            else {
+                document.getElementById('errorMsglastname').innerHTML = "";
 
             }
+            return true;
         }
         function checks() {
-           
+
             //debugger;
             var x = document.getElementById("check").value;
             console.log(x);
@@ -130,13 +167,14 @@
                 document.getElementById("errorMsgselect").innerHTML = "not selected option";
                 return false;
             }
-            else
+            else {
+                document.getElementById('errorMsglastname').innerHTML = "";
                 return true;
+            }
         }
-        
+         function validatephoneno(event) {
 
-        
-        function validatephoneno(event, temp) {
+             var temp = document.getElementById("phone");
 
             var numericExpression = /^[0-9]*$/;
             if (!(temp.value.match(numericExpression))) {
@@ -144,22 +182,16 @@
             }
             else if (temp.value.length < 10 || temp.value.length > 10) {
                 document.getElementById('errorMsgPhone').innerHTML = "* Phone Number should be 10 digit *";
-             
+
                 return false;
             }
-            //if (temp.value.match(numericExpression)) {
-            //    return true;
-            //} else {
-            //    document.getElementById('errorMsgPhone').value= "* It should contain only numbers *";
-            //    //document.getElementById('errorMsgPhone').style.visibility = visible;
-            //  //  this.focus();
+            else {
+                document.getElementById('errorMsgPhone').innerHTML = " ";
                 return true;
-            
+
+            }
         }
          
-       
-
-        
     </script>
 </body>
 </html>
