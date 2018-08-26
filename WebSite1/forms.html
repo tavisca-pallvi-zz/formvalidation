@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="Style.css">
+    <title></title>
+</head>
+<body>
+    <fieldset>
+        <legend>User Registration Form</legend>
+        <form action="Welcome.html" method="get" onsubmit="return validate()">
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+            <label for="FirstName"><b>FirstName</b></label>
+            <input type="text" placeholder="FirstName" name="FirstName" id="first" onblur="return validatealpha(event)">
+            <label class="errorMsg" id="errorMsgname"></label>
+            <label for="LastName"><b>LastName</b></label>
+            <input type="text" placeholder="LastName" name="LastName" id="last" onblur="return validatealphaname(event,this)">
+            <label class="errorMsg" id="errorMsglastname"></label>
+            <label for="Phone"><b>Phone Number</b></label>
+            <input type="text" placeholder="Phone Number" id="phone" name="Phone" onblur="return validatephoneno(event,this)">
+            <label class="errorMsg" id="errorMsgPhone"></label>
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="email" id="email" name="email" onblur="return validateemail(event)">
+            <label class="errorMsg" id="errorMsgEmail"></label>
+            <label>
+                <b>Address</b>
+                <textarea rows="4" cols="50" required>
+            </textarea>
+                <input class="errorMsg" value="">
+            </label>
+            <select id="check" onblur="return checks()">
+                <option value="Select">Select</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Pune">Pune</option>
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Banglore">Banglore</option>
+                <option value="Delhi">Delhi</option>
+            </select>
+            <label class="errorMsg" id="errorMsgselect"></label>
+            <label>Male <input type="radio" name="gender" value="male" onblur="return checkgender()"> <br></label>
+            <label>Female<input type="radio" name="gender" value="female" onblur="return checkgender()"></label>
+            <label>Other <input type="radio" name="gender" value="other" onblur="return checkgender()"></label>
+            <label class="errorMsg" id="errorMsggender"></label>
+            <div>
+                <button type="button" class="cancelbtn">Cancel</button>
+                <input type="submit" class="signupbtn" value="submit">
+            </div>
+        </form>
+    </fieldset>
+    <script>
+        function validate() {
+            var ev = '';
+            if (validateemail(ev) == true) {
+                if (checkgender()) {
+                    if (validatealpha(ev)) {
+                        if (validatealphaname(ev)) {
+                            if (checks()) {
+                                if (validatephoneno(ev)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            alert("The form is not fully validated");
+            return false;
+        }
+        function validateemail(event) {
+            document.getElementById('errorMsgEmail').innerHTML = "";
+            var temp = document.getElementById("email");
+            var emailExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (emailExp.test(temp.value)) {
+                document.getElementById('errorMsgEmail').innerHTML = "";
+                return true;
+            }
+            else {
+                document.getElementById('errorMsgEmail').innerHTML = "* Mail id is not in correct format *";
+                return false;
+            }
+        }
+        function checkgender() {
+            var p = document.getElementsByName("gender");
+            for (var i = 0; i < p.length; i++) {
+                if (p[i].checked == true) {
+                    document.getElementById('errorMsggender').innerHTML = "";
+                    return true;
+                }
+            }
+            document.getElementById('errorMsggender').innerHTML = "*Please check something*";
+            return false;
+        }
+        function validatealpha(event) {
+
+            var re_name = /^[A-Za-z]+$/;
+            var temp = document.getElementById("first");
+            document.getElementById('errorMsgname').innerHTML = " ";
+            if (!re_name.test(temp.value)) {
+                document.getElementById('errorMsgname').innerHTML = "*Name should not contain no*";
+                return false;
+            }
+            return true;
+        }
+        function validatealphaname(event) {
+            var temp = document.getElementById("last");
+            var re_name = /^[A-Za-z]+$/;
+            document.getElementById('errorMsglastname').innerHTML = " ";
+            if (!re_name.test(temp.value)) {
+                document.getElementById('errorMsglastname').innerHTML = "*Name should not contain no*";
+                return false;
+            }
+            else {
+                document.getElementById('errorMsglastname').innerHTML = "";
+            }
+            return true;
+        }
+        function checks() {
+            //debugger;
+            var x = document.getElementById("check").value;
+            console.log(x);
+            if (x == "Select") {
+                console.log("1");
+                document.getElementById("errorMsgselect").innerHTML = "not selected option";
+                return false;
+            }
+            else {
+                document.getElementById('errorMsglastname').innerHTML = "";
+                return true;
+            }
+        }
+        function validatephoneno(event) {
+            var temp = document.getElementById("phone");
+            var numericExpression = /^[0-9]*$/;
+            if (!(temp.value.match(numericExpression))) {
+                document.getElementById('errorMsgPhone').innerHTML = "*not in correct format*";
+            }
+            else if (temp.value.length < 10 || temp.value.length > 10) {
+                document.getElementById('errorMsgPhone').innerHTML = "* Phone Number should be 10 digit *";
+                return false;
+            }
+            else {
+                document.getElementById('errorMsgPhone').innerHTML = " ";
+                return true;
+            }
+        }
+
+    </script>
+</body>
+</html>
